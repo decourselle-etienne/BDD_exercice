@@ -4,9 +4,12 @@ from sqlalchemy.orm import sessionmaker
 
 SQLALCHEMY_DATABASE_URL = "mysql://root:123456@127.0.0.1:3306/socialnetwork"
 
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
-
+# Créez un objet sessionmaker
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+# Instanciez une session à partir de l'objet sessionmaker
+session = SessionLocal()
+
+# Maintenant, vous pouvez appeler add() sur l'objet session

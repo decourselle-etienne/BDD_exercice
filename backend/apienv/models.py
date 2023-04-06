@@ -1,7 +1,10 @@
 import enum
 from sqlalchemy import Column, ForeignKey, Integer, VARCHAR, Enum
+from sqlalchemy.ext.declarative import declarative_base
 
-from database import Base
+# from database import Base
+
+Base = declarative_base()
 
 
 class TypeEnum(enum.Enum):

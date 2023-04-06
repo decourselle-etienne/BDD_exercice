@@ -12,7 +12,9 @@ app = FastAPI()
 def get_db():
     db = SessionLocal()
     try:
+        print("db")
         yield db
+        print("db 2")
     finally:
         db.close()
 
@@ -20,10 +22,15 @@ def get_db():
 # generate data
 @app.post("/generate")
 async def generate_data():
-    db_gen = get_db()
-    db = next(db_gen)
-    data = crud.generate_data(db)
+    data = crud.generate_data()
     return data
+
+
+# @app.on_event("startup")
+# async def startup_event():
+#     # Exécutez la fonction seed_data lors du démarrage de l'application
+#     with SessionLocal() as session:
+#         crud.generate_data(session)
 
 
 # test

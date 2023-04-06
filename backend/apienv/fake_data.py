@@ -5,7 +5,7 @@ import database
 
 class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 
-    id = factory.Faker('random_number')
+    # id = factory.Faker('random_number')
     username = factory.Faker('name')
     email = factory.Faker('email')
     first_name = factory.Faker('name')
