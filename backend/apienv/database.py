@@ -1,3 +1,4 @@
+import sys
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -13,3 +14,5 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 
 # Maintenant, vous pouvez appeler add() sur l'objet session
+sys.setrecursionlimit(15000)
+print(sys.getrecursionlimit())

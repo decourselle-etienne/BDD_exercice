@@ -8,8 +8,8 @@ Base = declarative_base()
 
 
 class TypeEnum(enum.Enum):
-    like = "Like"
-    dislike = "Dislike"
+    Like = "Like"
+    Dislike = "Dislike"
 
 
 class User(Base):
