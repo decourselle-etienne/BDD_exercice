@@ -168,6 +168,76 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "generate seed",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/seed",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"seed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reporter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/reports",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"reports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE REPORT",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/$273/posts/$71/reports",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"$273",
+						"posts",
+						"$71",
+						"reports"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [

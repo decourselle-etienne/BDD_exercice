@@ -4,32 +4,31 @@ import models
 
 
 def get_users(db: Session):
-    users = db.query(models.User, models.Post, models.Reaction, models.Report).filter(
-        models.User.id == models.Post.user_id).filter(models.Post.id == models.Reaction.post_id).filter(models.User.id != models.Report.user_id).all()
-
-    # for user in users:
-    #     posts = db.query(models.Post).filter(
-    #         user.id == models.Post.user_id)
-
-    #     for post in posts:
-    #         reactions = db.query(models.Reaction).filter(
-    #             post.id == models.Reaction.post_id).all()
-    #         post.reactions = reactions
-    #     user.posts = posts
+    # users = db.query(models.User, models.Post, models.Reaction, models.Report).filter(
+    #     models.User.id == models.Post.user_id).filter(models.Post.id == models.Reaction.post_id).filter(models.User.id != models.Report.user_id).all()
+    reports = db.query(models.Report.user_id).all()
+    users = db.query(models.User, models.Post, models.Reaction).filter(
+        models.User.id == models.Post.user_id).filter(models.Post.id == models.Reaction.post_id).filter(models.Post.user_id.not_in(reports)).limit(100).all()
 
     return users
 
 
 def get_users_reports(db: Session):
-    reports = db.query(models.Report.user_id).all()
-    users = []
-    for report in reports:
-        db_user = db.query(models.User).filter(
-            report.user_id == models.User.id).first()
-        if db_user in users:
-            pass
-        else:
-            users.append(db_user)
+    # users = db.query(models.User, models.Report).filter(
+    #     models.User.id == models.Report.user_id).all()
+
+    users = db.query(models.User, models.Report).filter(
+        models.User.id == models.Report.user_id).limit(100).all()
+
+    # reports = db.query(models.Report.user_id).all()
+    # users = []
+    # for report in reports:
+    #     db_user = db.query(models.User).filter(
+    #         report.user_id == models.User.id).first()
+    #     if db_user in users:
+    #         pass
+    #     else:
+    #         users.append(db_user)
 
     return users
 
