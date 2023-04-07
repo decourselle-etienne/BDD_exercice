@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI, Path, Body
 from sqlalchemy.orm import Session
 from typing import Annotated
 
-
+import fake_data
 import crud
 import schemas
 from database import SessionLocal
@@ -19,6 +19,15 @@ def get_db():
         db.close()
 
 
+@app.post('/seed')
+def seed_data():
+    fake_data.seed_users()
+    fake_data.seed_posts()
+    fake_data.seed_reactions()
+    fake_data.seed_reports()
+    return {"message": "Data seeded"}
+
+
 # Ajouter un nouveau post
 @app.post("/${user_id}/posts")
 async def add_post(content: Annotated[str, Body(embed=True)], user_id: int, db: Session = Depends(get_db)):
@@ -29,30 +38,52 @@ async def add_post(content: Annotated[str, Body(embed=True)], user_id: int, db: 
 
 # Ajouter une nouvelle reaction
 @app.post("/${user_id}/posts/${post_id}/reactions/${value}")
-async def add_reaction(post_id: int, user_id: int, value: int, db: Session = Depends(get_db)):
-    new_reaction = crud.add_reaction(
+async def add_report(value: int, post_id: int, user_id: int, db: Session = Depends(get_db)):
+    new_reaction = crud.add_report(
         db, post_id=post_id, user_id=user_id, value=value)
     return new_reaction
 
 
-# Afficher tous les users, tous les posts et toutes les réactions séparément
+# Ajouter un nouveau report
+@app.post("/${user_id}/posts/${post_id}/reports")
+async def add_reaction(user_id: int, post_id: int,  reason: Annotated[str, Body(embed=True)], db: Session = Depends(get_db)):
+    new_report = crud.add_reaction(
+        db, post_id=post_id, user_id=user_id, reason=reason)
+    return new_report
+
+
+# Afficher le total d'users, de posts, de réactions, de reports, de posts avec report et de reporter
 @app.get("/all")
 async def get_all(db: Session = Depends(get_db)):
     data = crud.get_all(db)
     return data
 
 
-# Afficher tous les posts avec leur réactions associées
+# Afficher tous les posts avec leur réactions associées et leur nombre de report
 @app.get("/posts")
-def read_items(db: Session = Depends(get_db)):
-    items = crud.get_posts(db)
-    return items
+def get_post(db: Session = Depends(get_db)):
+    posts = crud.get_posts(db)
+    return posts
 
 
-# Afficher tous les users avec leur posts et leurs réactions réalisées
+# Afficher tous les reports avec leur Reporter et Post visé
+@app.get("/reports")
+def get_reports(db: Session = Depends(get_db)):
+    reports = crud.get_reports(db)
+    return reports
+
+
+# Afficher tous les users avec leur posts et leurs réactions réalisées en excluant les posts avec au moins 1 report
 @app.get("/users")
-def read_users(db: Session = Depends(get_db)):
+def get_users(db: Session = Depends(get_db)):
     users = crud.get_users(db)
+    return users
+
+
+# Afficher tous les users qui ont réalisé au moins 1 report
+@app.get("/users/reports")
+def read_users_reports(db: Session = Depends(get_db)):
+    users = crud.get_users_reports(db)
     return users
 
 
@@ -62,3 +93,12 @@ async def modify_post(content: Annotated[str, Body(embed=True)], user_id: int, p
     modify_post = crud.modify_post(
         db, user_id=user_id, post_id=post_id, content=content)
     return modify_post
+
+# Supprimer un report
+
+
+@app.delete("/${user_id}/posts/${post_id}/reports")
+async def delete_report(user_id: int, post_id: int, db: Session = Depends(get_db)):
+    delete_report = crud.delete_report(
+        db, user_id=user_id, post_id=post_id)
+    return delete_report

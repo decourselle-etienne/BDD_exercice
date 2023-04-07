@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 # from database import Base
 
 Base = declarative_base()
+metadata = Base.metadata
 
 
 class TypeEnum(enum.Enum):
@@ -36,3 +37,11 @@ class Reaction(Base):
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     post_id = Column(Integer, ForeignKey("posts.id"), primary_key=True)
     type = Column(Enum(TypeEnum), index=True, nullable=False)
+
+
+class Report(Base):
+    __tablename__ = "reports"
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    post_id = Column(Integer, ForeignKey("posts.id"), primary_key=True)
+    reason = Column(VARCHAR(250), index=True, nullable=False)
